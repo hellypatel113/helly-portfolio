@@ -1,1412 +1,1318 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helly Patel | Senior Web Developer</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-tertiary: #1a1a1a;
-            --bg-card: #0f0f0f;
-            --text-primary: #ffffff;
-            --text-secondary: #8a8a8a;
-            --text-tertiary: #555555;
-            --accent: #00ff88;
-            --accent-dim: #00cc6a;
-            --accent-glow: rgba(0, 255, 136, 0.15);
-            --accent-glow-strong: rgba(0, 255, 136, 0.3);
-            --border: rgba(255, 255, 255, 0.06);
-            --border-hover: rgba(255, 255, 255, 0.12);
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Noise texture overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0.015;
-            z-index: 0;
-            pointer-events: none;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-        }
-
-        .gradient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.15;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .orb-1 {
-            width: 700px;
-            height: 700px;
-            background: radial-gradient(circle, #00ff88 0%, transparent 70%);
-            top: -300px;
-            right: -200px;
-            animation: orbFloat1 25s ease-in-out infinite;
-        }
-
-        .orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, #0055ff 0%, transparent 70%);
-            bottom: -100px;
-            left: -200px;
-            animation: orbFloat2 30s ease-in-out infinite;
-        }
-
-        .orb-3 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, #ff0066 0%, transparent 70%);
-            top: 50%;
-            left: 50%;
-            opacity: 0.06;
-            animation: orbFloat3 20s ease-in-out infinite;
-        }
-
-        @keyframes orbFloat1 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(-30px, 40px) scale(1.05); }
-            66% { transform: translate(20px, -20px) scale(0.95); }
-        }
-
-        @keyframes orbFloat2 {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(40px, -30px) scale(1.1); }
-        }
-
-        @keyframes orbFloat3 {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-45%, -55%) scale(1.15); }
-        }
-
-        .container {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 0 40px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 20px 0;
-            z-index: 1000;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            background: rgba(10, 10, 10, 0.7);
-            border-bottom: 1px solid var(--border);
-            transition: all 0.4s ease;
-        }
-
-        nav.scrolled {
-            padding: 14px 0;
-            background: rgba(10, 10, 10, 0.95);
-        }
-
-        .nav-content {
-            max-width: 1300px;
-            margin: 0 auto;
-            padding: 0 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 400;
-            color: var(--text-primary);
-            letter-spacing: 0.08em;
-            position: relative;
-        }
-
-        .logo span {
-            color: var(--accent);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 36px;
-            list-style: none;
-            align-items: center;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            letter-spacing: 0.03em;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1.5px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .nav-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.82rem;
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .nav-status::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            background: var(--accent);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--accent-glow-strong); }
-            50% { opacity: 0.7; box-shadow: 0 0 0 6px transparent; }
-        }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 140px 0 100px;
-            position: relative;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            width: 100%;
-        }
-
-        .hero-eyebrow {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 18px;
-            background: rgba(0, 255, 136, 0.06);
-            border: 1px solid rgba(0, 255, 136, 0.15);
-            border-radius: 100px;
-            color: var(--accent);
-            font-size: 0.78rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.18em;
-            margin-bottom: 36px;
-            animation: slideDown 0.6s ease;
-        }
-
-        .hero h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(4rem, 9vw, 7.5rem);
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            line-height: 0.92;
-            margin-bottom: 28px;
-            animation: slideUp 0.7s ease 0.15s backwards;
-        }
-
-        .hero h1 .line-2 {
-            display: block;
-            background: linear-gradient(135deg, #ffffff 30%, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-description {
-            font-size: clamp(1.05rem, 1.5vw, 1.25rem);
-            color: var(--text-secondary);
-            max-width: 620px;
-            margin-bottom: 48px;
-            line-height: 1.8;
-            font-weight: 300;
-            animation: slideUp 0.7s ease 0.3s backwards;
-        }
-
-        .cta-group {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            animation: slideUp 0.7s ease 0.45s backwards;
-        }
-
-        .cta-primary {
-            padding: 16px 36px;
-            background: var(--accent);
-            color: var(--bg-primary);
-            font-size: 0.92rem;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 100px;
-            transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 0 40px var(--accent-glow);
-            letter-spacing: 0.02em;
-        }
-
-        .cta-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 50px var(--accent-glow-strong);
-            background: #00ffaa;
-        }
-
-        .cta-secondary {
-            padding: 16px 36px;
-            background: transparent;
-            color: var(--text-primary);
-            font-size: 0.92rem;
-            font-weight: 500;
-            text-decoration: none;
-            border-radius: 100px;
-            border: 1px solid var(--border-hover);
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .cta-secondary:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        .cta-arrow {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.3s ease;
-        }
-
-        .cta-primary:hover .cta-arrow,
-        .cta-secondary:hover .cta-arrow {
-            transform: translateX(3px);
-        }
-
-        /* Stats */
-        .stats-bar {
-            display: flex;
-            gap: 0;
-            margin-top: 80px;
-            animation: slideUp 0.7s ease 0.6s backwards;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            background: var(--bg-card);
-        }
-
-        .stat-item {
-            flex: 1;
-            padding: 32px 28px;
-            text-align: center;
-            position: relative;
-            transition: background 0.3s ease;
-        }
-
-        .stat-item:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 20%;
-            height: 60%;
-            width: 1px;
-            background: var(--border);
-        }
-
-        .stat-item:hover {
-            background: rgba(0, 255, 136, 0.03);
-        }
-
-        .stat-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.8rem;
-            font-weight: 400;
-            color: var(--accent);
-            letter-spacing: 0.03em;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            font-weight: 500;
-        }
-
-        /* Section Headers */
-        .projects-section {
-            padding: 120px 0;
-            position: relative;
-        }
-
-        .section-header {
-            margin-bottom: 72px;
-        }
-
-        .section-label {
-            font-size: 0.75rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .section-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(3rem, 6vw, 5rem);
-            font-weight: 400;
-            letter-spacing: 0.04em;
-            line-height: 1;
-        }
-
-        .section-divider {
-            width: 60px;
-            height: 2px;
-            background: var(--accent);
-            margin-top: 24px;
-            opacity: 0.5;
-        }
-
-        /* Projects */
-        .projects-grid {
-            display: grid;
-            gap: 40px;
-        }
-
-        .project {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 0;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-        }
-
-        .project:hover {
-            transform: translateY(-6px);
-            border-color: rgba(0, 255, 136, 0.2);
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4), 0 0 60px var(--accent-glow);
-        }
-
-        .project:nth-child(even) {
-            direction: rtl;
-        }
-
-        .project:nth-child(even) > * {
-            direction: ltr;
-        }
-
-        .project-visual {
-            width: 100%;
-            height: 100%;
-            min-height: 480px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .brand-display {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 400;
-            letter-spacing: 0.12em;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 1;
-        }
-
-        .project:hover .brand-display {
-            transform: scale(1.05);
-        }
-
-        /* Project 1 - FBC */
-        .project:nth-child(1) .project-visual {
-            background: linear-gradient(135deg, #fff0f5 0%, #ffd6e8 50%, #ffb3d9 100%);
-        }
-
-        .project:nth-child(1) .brand-display {
-            color: #c7004c;
-            text-shadow: 0 4px 30px rgba(199, 0, 76, 0.2);
-            font-size: 3rem;
-        }
-
-        /* Project 2 - AIZA */
-        .project:nth-child(2) .project-visual {
-            background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #262626 100%);
-        }
-
-        .project:nth-child(2) .brand-display {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 50%, #ffd700 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 4px 20px rgba(255, 215, 0, 0.3));
-        }
-
-        /* Project 3 - Kores */
-        .project:nth-child(3) .project-visual {
-            background: linear-gradient(135deg, #003399 0%, #0052cc 50%, #0065ff 100%);
-        }
-
-        .project:nth-child(3) .brand-display {
-            color: #ffffff;
-            text-shadow: 0 4px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        /* Project 4 - Foxtale */
-        .project:nth-child(4) .project-visual {
-            background: linear-gradient(135deg, #e85d2a 0%, #ff6b35 50%, #ff8c42 100%);
-        }
-
-        .project:nth-child(4) .brand-display {
-            color: #ffffff;
-            text-shadow: 0 4px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        .project-info {
-            padding: 48px 44px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .project-meta {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .project-tag {
-            padding: 5px 12px;
-            background: rgba(0, 255, 136, 0.06);
-            border: 1px solid rgba(0, 255, 136, 0.15);
-            border-radius: 100px;
-            color: var(--accent);
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .project h3 {
-            font-family: 'Oswald', sans-serif;
-            font-size: clamp(2rem, 3vw, 2.8rem);
-            font-weight: 600;
-            margin-bottom: 16px;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-        }
-
-        .project-description {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            line-height: 1.8;
-            margin-bottom: 28px;
-            font-weight: 300;
-        }
-
-        .project-metrics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0;
-            margin-bottom: 28px;
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .metric {
-            text-align: center;
-            padding: 20px 12px;
-            position: relative;
-        }
-
-        .metric:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 20%;
-            height: 60%;
-            width: 1px;
-            background: var(--border);
-        }
-
-        .metric-value {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2rem;
-            font-weight: 400;
-            color: var(--accent);
-            letter-spacing: 0.03em;
-            line-height: 1;
-            margin-bottom: 6px;
-        }
-
-        .metric-label {
-            font-size: 0.65rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-weight: 500;
-        }
-
-        .tech-stack {
-            margin-bottom: 28px;
-        }
-
-        .tech-stack-label {
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .tech-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .tech-item {
-            padding: 5px 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.78rem;
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-            font-weight: 400;
-        }
-
-        .tech-item:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(0, 255, 136, 0.05);
-        }
-
-        .project-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-hover);
-            font-size: 0.85rem;
-            font-weight: 500;
-            text-decoration: none;
-            border-radius: 100px;
-            transition: all 0.3s ease;
-            width: fit-content;
-        }
-
-        .project-link:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(0, 255, 136, 0.05);
-        }
-
-        .project-link svg {
-            width: 14px;
-            height: 14px;
-            transition: transform 0.3s ease;
-        }
-
-        .project-link:hover svg {
-            transform: translateX(4px);
-        }
-
-        /* Footer */
-        footer {
-            padding: 120px 0 50px;
-            position: relative;
-            border-top: 1px solid var(--border);
-        }
-
-        .footer-content {
-            text-align: center;
-        }
-
-        .footer-label {
-            font-size: 0.75rem;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .footer-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(3rem, 6vw, 5rem);
-            font-weight: 400;
-            margin-bottom: 20px;
-            letter-spacing: 0.04em;
-        }
-
-        .footer-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 48px;
-            font-weight: 300;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 80px;
-            flex-wrap: wrap;
-        }
-
-        .footer-link {
-            padding: 14px 28px;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            border-radius: 100px;
-            border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .footer-link:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            transform: translateY(-2px);
-            background: rgba(0, 255, 136, 0.05);
-        }
-
-        .footer-bottom {
-            padding-top: 30px;
-            border-top: 1px solid var(--border);
-            color: var(--text-tertiary);
-            font-size: 0.82rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-bottom-links {
-            display: flex;
-            gap: 24px;
-        }
-
-        .footer-bottom-links a {
-            color: var(--text-tertiary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-bottom-links a:hover {
-            color: var(--accent);
-        }
-
-        /* Animations */
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Mobile nav toggle */
-        .nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .nav-toggle span {
-            display: block;
-            width: 22px;
-            height: 1.5px;
-            background: var(--text-primary);
-            margin: 5px 0;
-            transition: all 0.3s ease;
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .project {
-                grid-template-columns: 1fr;
-            }
-
-            .project:nth-child(even) {
-                direction: ltr;
-            }
-
-            .project-visual {
-                min-height: 320px;
-            }
-
-            .project-info {
-                padding: 36px 32px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .container, .nav-content {
-                padding: 0 20px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .nav-toggle {
-                display: block;
-            }
-
-            .stats-bar {
-                flex-direction: column;
-                gap: 0;
-            }
-
-            .stat-item:not(:last-child)::after {
-                right: 20%;
-                top: auto;
-                bottom: 0;
-                height: 1px;
-                width: 60%;
-            }
-
-            .stat-item {
-                padding: 24px 20px;
-            }
-
-            .project-info {
-                padding: 28px 24px;
-            }
-
-            .project-metrics {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .brand-display {
-                font-size: 2.5rem;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                gap: 16px;
-                text-align: center;
-            }
-        }
-
-        /* Custom Cursor */
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            transition: transform 0.15s ease;
-            box-shadow: 0 0 15px var(--accent-glow-strong);
-            top: 0;
-            left: 0;
-        }
-
-        .cursor-ring {
-            width: 36px;
-            height: 36px;
-            border: 1.5px solid var(--accent);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.5;
-            top: 0;
-            left: 0;
-            transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
-        }
-
-        .cursor-ring.hovering {
-            width: 56px;
-            height: 56px;
-            opacity: 0.3;
-        }
-
-        .cursor-dot.hovering {
-            transform: scale(2);
-        }
-
-        @media (max-width: 768px) {
-            .cursor-dot, .cursor-ring {
-                display: none;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero h1 {
-                font-size: 3.2rem;
-            }
-
-            .cta-group {
-                flex-direction: column;
-            }
-
-            .cta-primary, .cta-secondary {
-                justify-content: center;
-                width: 100%;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helly Patel — Software Developer & Tech Lead</title>
+<meta name="description" content="Helly Patel — full-stack developer & tech lead from Surat, Gujarat. Building international Shopify storefronts, AWS middleware, and AI-powered automation at devx AI labs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Pichwai-inspired palette: ivory paper, indigo-cobalt, marigold, vermilion */
+  --paper: #f6f0e3;
+  --paper-2: #ede4cf;
+  --ink: #181410;
+  --ink-2: #5d564a;
+  --ink-3: #918874;
+  --rule: #d8cdb2;
+  --indigo: #1c3d6e;       /* Pichwai cobalt */
+  --indigo-deep: #142a4d;
+  --vermilion: #b8442a;    /* Sindoor / kumkum */
+  --marigold: #d99125;     /* Marigold petal */
+  --tulsi: #4a6244;        /* Tulsi leaf green */
+  --gold: #b88a3a;         /* Old gold leaf */
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter Tight', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.55;
+  font-feature-settings: "ss01", "cv11";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  position: relative;
+}
+
+/* Subtle paper grain — handmade khadi feel */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.09 0 0 0 0 0.08 0 0 0 0 0.06 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+
+::selection { background: var(--indigo); color: var(--paper); }
+
+a { color: inherit; }
+
+.container { max-width: 1240px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 2; }
+
+/* Lucide-style icons */
+.icon { width: 18px; height: 18px; flex-shrink: 0; stroke-width: 1.5; }
+.icon-sm { width: 14px; height: 14px; }
+.icon-lg { width: 22px; height: 22px; stroke-width: 1.4; }
+
+/* Devanagari section markers - very subtle */
+.devanagari {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-weight: 400;
+}
+
+/* ====================================================================
+   NAV
+==================================================================== */
+nav {
+  position: fixed; top: 0; left: 0; width: 100%;
+  z-index: 100;
+  background: rgba(246, 240, 227, 0.85);
+  backdrop-filter: saturate(180%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.3s ease, padding 0.3s ease;
+  padding: 20px 0;
+}
+nav.scrolled { border-bottom-color: var(--rule); padding: 14px 0; }
+
+.nav-content {
+  max-width: 1240px; margin: 0 auto; padding: 0 40px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+.logo {
+  font-family: 'Fraunces', serif;
+  font-size: 1.05rem; font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  display: flex; align-items: center; gap: 10px;
+}
+.logo-mark {
+  width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--vermilion);
+}
+
+.nav-links {
+  display: flex; gap: 36px; list-style: none; align-items: center;
+}
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; font-weight: 400;
+  text-decoration: none; color: var(--ink-2);
+  letter-spacing: 0.02em;
+  transition: color 0.25s ease;
+}
+.nav-links a:hover { color: var(--vermilion); }
+.nav-links .num {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  color: var(--ink-3);
+  font-size: 0.85rem;
+  margin-right: 6px;
+}
+
+/* ====================================================================
+   ORNAMENT — used as section dividers (kalamkari-inspired motif)
+==================================================================== */
+.ornament {
+  display: flex; align-items: center; justify-content: center;
+  gap: 18px; color: var(--vermilion);
+  margin: 0 auto;
+}
+.ornament svg { width: 36px; height: 22px; opacity: 0.85; }
+.ornament-line {
+  flex: 1; max-width: 60px; height: 1px;
+  background: var(--rule);
+}
+
+/* ====================================================================
+   HERO — big sky, like a temple courtyard
+==================================================================== */
+.hero {
+  padding: 200px 0 130px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative arched motif — pichwai inspired, very subtle */
+.hero-arch {
+  position: absolute;
+  top: 110px; right: -120px;
+  width: 580px; height: 720px;
+  pointer-events: none;
+  opacity: 0.13;
+  z-index: 1;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem; color: var(--ink-2);
+  text-transform: uppercase; letter-spacing: 0.14em;
+  margin-bottom: 36px;
+  display: flex; align-items: center; gap: 14px;
+  position: relative; z-index: 2;
+}
+.hero-eyebrow::before {
+  content: ''; width: 28px; height: 1px; background: var(--vermilion);
+}
+
+/* The Sanskrit invocation */
+.hero-shloka {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-size: 1.05rem;
+  color: var(--vermilion);
+  font-style: italic;
+  margin-bottom: 14px;
+  letter-spacing: 0.01em;
+  position: relative; z-index: 2;
+}
+.hero-shloka-translit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--ink-3);
+  letter-spacing: 0.06em;
+  margin-bottom: 36px;
+  font-style: italic;
+  position: relative; z-index: 2;
+}
+
+.hero h1 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(3rem, 7.5vw, 7rem);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  margin-bottom: 56px;
+  font-variation-settings: "opsz" 144;
+  max-width: 1100px;
+  position: relative; z-index: 2;
+}
+.hero h1 em {
+  font-style: italic; font-weight: 300;
+  color: var(--vermilion);
+}
+
+.hero-meta-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 80px;
+  align-items: end;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+  position: relative; z-index: 2;
+}
+
+.hero-description {
+  font-size: 1.08rem;
+  color: var(--ink-2);
+  max-width: 580px;
+  line-height: 1.65;
+}
+.hero-description strong { color: var(--ink); font-weight: 500; }
+
+.hero-actions {
+  display: flex; flex-direction: column; gap: 14px;
+  align-items: flex-start;
+}
+
+.btn {
+  font-family: 'Inter Tight', sans-serif;
+  font-size: 0.92rem; font-weight: 500;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+.btn-primary { background: var(--ink); color: var(--paper); }
+.btn-primary:hover { background: var(--vermilion); transform: translateY(-1px); }
+.btn-ghost {
+  background: transparent; color: var(--ink); border-color: var(--ink);
+}
+.btn-ghost:hover { background: var(--ink); color: var(--paper); }
+.btn .icon { transition: transform 0.3s ease; }
+.btn:hover .icon { transform: translateX(3px); }
+
+/* Stat row */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 100px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  position: relative; z-index: 2;
+}
+.stat {
+  padding: 28px 28px 28px 0;
+  border-right: 1px solid var(--rule);
+}
+.stat:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Fraunces', serif;
+  font-size: 2.6rem; font-weight: 400;
+  line-height: 1; letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  font-variation-settings: "opsz" 144;
+}
+.stat-num em { font-style: italic; color: var(--vermilion); font-weight: 300; }
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--ink-2);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+
+/* ====================================================================
+   SECTIONS — common scaffolding
+==================================================================== */
+section { padding: 120px 0; position: relative; }
+section + section { padding-top: 60px; }
+
+.section-head {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+  margin-bottom: 80px;
+  align-items: start;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--rule);
+}
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.14em;
+  padding-top: 16px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.section-num .deva {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-size: 1.6rem;
+  color: var(--vermilion);
+  font-style: italic;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: none;
+}
+.section-head h2 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 300;
+  line-height: 1.05; letter-spacing: -0.025em;
+  max-width: 720px;
+  font-variation-settings: "opsz" 144;
+}
+.section-head h2 em { font-style: italic; color: var(--vermilion); font-weight: 300; }
+.section-head p {
+  margin-top: 20px;
+  color: var(--ink-2);
+  font-size: 1.02rem;
+  max-width: 560px;
+}
+.section-head .quote {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-style: italic;
+  color: var(--tulsi);
+  font-size: 0.92rem;
+  margin-top: 14px;
+  letter-spacing: 0.01em;
+}
+
+/* ====================================================================
+   SHARED SIDE LABEL (used by skills & elsewhere)
+==================================================================== */
+.now-side {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  padding-top: 8px;
+}
+
+/* ====================================================================
+   APPROACH (replaces resume-style "Now" list)
+==================================================================== */
+.approach-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.approach-card {
+  padding: 48px 36px 48px 0;
+  border-right: 1px solid var(--rule);
+  position: relative;
+}
+.approach-card:last-child { border-right: none; padding-right: 0; }
+.approach-card:not(:first-child) { padding-left: 36px; }
+.approach-num {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-size: 2.4rem;
+  color: var(--vermilion);
+  font-style: italic;
+  line-height: 1;
+  margin-bottom: 32px;
+  display: inline-block;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--vermilion);
+}
+.approach-title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  font-variation-settings: "opsz" 144;
+}
+.approach-title em { font-style: italic; color: var(--vermilion); font-weight: 300; }
+.approach-card p {
+  color: var(--ink-2);
+  font-size: 0.98rem;
+  line-height: 1.65;
+}
+
+.approach-pull {
+  margin-top: 64px;
+  padding: 48px 0 8px;
+  border-top: 1px solid var(--rule);
+}
+.approach-pull p {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+  font-weight: 300;
+  line-height: 1.45;
+  letter-spacing: -0.015em;
+  max-width: 880px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144;
+}
+.approach-pull p strong { font-weight: 500; color: var(--vermilion); }
+.approach-pull p em { font-style: italic; color: var(--ink-2); font-weight: 300; }
+
+/* ====================================================================
+   WORK
+==================================================================== */
+.work-list { display: flex; flex-direction: column; gap: 0; }
+.project {
+  display: grid;
+  grid-template-columns: 200px 1fr 60px;
+  gap: 60px;
+  padding: 56px 0;
+  border-top: 1px solid var(--rule);
+  align-items: start;
+}
+.project:last-child { border-bottom: 1px solid var(--rule); }
+.project:hover .project-arrow { transform: translateX(8px); color: var(--vermilion); }
+
+.project-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem; letter-spacing: 0.06em;
+  display: flex; flex-direction: column; gap: 14px;
+  padding-top: 12px;
+}
+.project-meta .num {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  color: var(--vermilion);
+  font-size: 1.4rem;
+  letter-spacing: 0;
+  line-height: 1;
+  font-style: italic;
+}
+.project-meta .year { color: var(--ink-3); }
+.project-meta .role {
+  color: var(--ink-2);
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.project-body h3 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: -0.02em; line-height: 1.05;
+  margin-bottom: 6px;
+  font-variation-settings: "opsz" 144;
+}
+.project-body h3 em { font-style: italic; color: var(--vermilion); font-weight: 300; }
+.project-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; color: var(--ink-3);
+  margin-bottom: 28px;
+  letter-spacing: 0.04em;
+}
+.project-body p {
+  color: var(--ink-2); font-size: 1.02rem;
+  line-height: 1.65; margin-bottom: 32px;
+  max-width: 580px;
+}
+
+.project-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 32px;
+}
+.tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  color: var(--ink-2);
+  background: transparent;
+}
+
+.project-links { display: flex; gap: 28px; flex-wrap: wrap; }
+.project-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ink);
+  transition: all 0.3s ease;
+}
+.project-link:hover { color: var(--vermilion); border-color: var(--vermilion); }
+.project-link.alt { color: var(--vermilion); border-color: var(--vermilion); }
+.project-arrow {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease;
+  color: var(--ink-3);
+  align-self: start; padding-top: 12px;
+}
+
+/* Project metric strip */
+.project-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border-top: 1px solid var(--ink);
+  padding-top: 24px;
+  margin-bottom: 32px;
+  max-width: 580px;
+}
+.project-metrics .m { padding-right: 16px; }
+.project-metrics .m + .m { border-left: 1px solid var(--rule); padding-left: 16px; }
+.project-metrics .m-val {
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem; font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1; margin-bottom: 6px;
+}
+.project-metrics .m-val em { font-style: italic; color: var(--vermilion); font-weight: 300; }
+.project-metrics .m-lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.66rem; color: var(--ink-2);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  line-height: 1.4;
+}
+
+/* ====================================================================
+   SKILLS
+==================================================================== */
+.skills-block {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+}
+.skills-list { display: flex; flex-direction: column; }
+.skill-row {
+  display: grid;
+  grid-template-columns: 36px 240px 1fr;
+  gap: 32px;
+  padding: 24px 0;
+  border-top: 1px solid var(--rule);
+  align-items: start;
+  transition: padding-left 0.3s ease;
+}
+.skill-row:last-child { border-bottom: 1px solid var(--rule); }
+.skill-row:hover { padding-left: 12px; }
+.skill-row:hover .skill-name { color: var(--vermilion); }
+.skill-icon { color: var(--vermilion); padding-top: 2px; }
+.skill-name {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem; font-weight: 500;
+  letter-spacing: -0.01em;
+  transition: color 0.3s ease;
+}
+.skill-tools {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem; color: var(--ink-2);
+  line-height: 1.7;
+}
+
+/* ====================================================================
+   TIMELINE
+==================================================================== */
+.timeline { display: flex; flex-direction: column; }
+.timeline-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 60px;
+  padding: 40px 0;
+  border-top: 1px solid var(--rule);
+}
+.timeline-item:last-child { border-bottom: 1px solid var(--rule); }
+.timeline-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; color: var(--ink-2);
+  letter-spacing: 0.04em; padding-top: 6px;
+}
+.timeline-date strong {
+  color: var(--vermilion); display: block;
+  margin-bottom: 4px; font-weight: 500;
+}
+.timeline-content h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 1.6rem; font-weight: 400;
+  letter-spacing: -0.015em; margin-bottom: 4px;
+}
+.timeline-content h3 a {
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 1px;
+}
+.timeline-content h3 a:hover { color: var(--vermilion); border-color: var(--vermilion); }
+.timeline-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; color: var(--ink-3);
+  margin-bottom: 14px; letter-spacing: 0.03em;
+}
+.timeline-content p {
+  color: var(--ink-2); font-size: 0.98rem;
+  line-height: 1.65; max-width: 640px;
+}
+
+/* ====================================================================
+   ROOTS — small heritage callout block
+==================================================================== */
+.roots {
+  margin: 100px 0;
+  padding: 80px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.roots-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+.roots-side {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  padding-top: 8px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.roots-side .deva {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-size: 1.4rem;
+  color: var(--vermilion);
+  font-style: italic;
+  letter-spacing: 0;
+  line-height: 1;
+  text-transform: none;
+}
+.roots h3 {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 20px;
+  font-variation-settings: "opsz" 144;
+}
+.roots h3 em { font-style: italic; color: var(--vermilion); font-weight: 300; }
+.roots-text {
+  color: var(--ink-2); font-size: 1rem;
+  line-height: 1.7;
+}
+.roots-text strong { color: var(--ink); font-weight: 500; }
+.roots-text + .roots-text { margin-top: 16px; }
+.roots-quote {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-style: italic;
+  color: var(--tulsi);
+  font-size: 0.95rem;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--rule);
+  letter-spacing: 0.01em;
+}
+.roots-quote-translit {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-style: italic;
+  font-size: 0.72rem;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  margin-top: 8px;
+}
+
+/* ====================================================================
+   CONTACT
+==================================================================== */
+.contact-section {
+  padding: 160px 0 120px;
+  border-top: 1px solid var(--rule);
+  position: relative;
+}
+.contact-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem; color: var(--ink-2);
+  text-transform: uppercase; letter-spacing: 0.14em;
+  margin-bottom: 40px;
+  display: flex; align-items: center; gap: 14px;
+}
+.contact-eyebrow::before {
+  content: ''; width: 28px; height: 1px; background: var(--vermilion);
+}
+.contact-eyebrow .deva {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-size: 1rem;
+  color: var(--vermilion);
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.contact-title {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 300;
+  line-height: 1; letter-spacing: -0.035em;
+  margin-bottom: 56px;
+  font-variation-settings: "opsz" 144;
+  max-width: 900px;
+}
+.contact-title em { font-style: italic; color: var(--vermilion); font-weight: 300; }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+}
+.contact-col h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  margin-bottom: 16px; font-weight: 400;
+}
+.contact-link {
+  font-family: 'Fraunces', serif;
+  font-size: 1.4rem; font-weight: 400;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ink);
+  transition: all 0.3s ease;
+}
+.contact-link:hover { color: var(--vermilion); border-color: var(--vermilion); }
+.contact-link .icon { color: var(--ink-3); transition: transform 0.3s ease; }
+.contact-link:hover .icon { color: var(--vermilion); transform: translate(2px, -2px); }
+
+.social-list {
+  display: flex; flex-direction: column; gap: 14px;
+  list-style: none;
+}
+.social-list a {
+  display: inline-flex; align-items: center; gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem; text-decoration: none;
+  color: var(--ink-2);
+  transition: color 0.3s ease;
+}
+.social-list a:hover { color: var(--vermilion); }
+
+/* ====================================================================
+   FOOTER
+==================================================================== */
+footer {
+  padding: 32px 0;
+  border-top: 1px solid var(--rule);
+}
+.footer-content {
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem; color: var(--ink-3);
+  letter-spacing: 0.04em;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-content .signoff {
+  font-family: 'Tiro Devanagari Sanskrit', serif;
+  font-size: 0.92rem; color: var(--vermilion);
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ====================================================================
+   REVEAL
+==================================================================== */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.34, 1.1, 0.64, 1); }
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* ====================================================================
+   RESPONSIVE
+==================================================================== */
+@media (max-width: 960px) {
+  .container { padding: 0 24px; }
+  .nav-content { padding: 0 24px; }
+  .nav-links { gap: 22px; }
+  .nav-links a:not(.btn-mini) { display: none; }
+  .nav-links li:last-child a { display: inline-flex; }
+
+  .hero { padding: 140px 0 80px; }
+  .hero-arch { width: 320px; height: 400px; opacity: 0.08; top: 130px; right: -60px; }
+  .hero-meta-grid { grid-template-columns: 1fr; gap: 40px; align-items: start; }
+  .hero-actions { flex-direction: row; flex-wrap: wrap; }
+
+  .stat-row { grid-template-columns: 1fr 1fr; }
+  .stat { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 22px 22px 22px 0; }
+  .stat:nth-child(2n) { border-right: none; }
+  .stat:nth-last-child(-n+2) { border-bottom: none; }
+
+  .section-head { grid-template-columns: 1fr; gap: 24px; }
+  .now-grid { grid-template-columns: 1fr; gap: 24px; }
+  .approach-grid { grid-template-columns: 1fr; }
+  .approach-card { padding: 36px 0 36px 0 !important; border-right: none; border-bottom: 1px solid var(--rule); }
+  .approach-card:last-child { border-bottom: none; }
+
+  .skills-block { grid-template-columns: 1fr; gap: 24px; }
+  .skill-row { grid-template-columns: 24px 1fr; gap: 18px; }
+  .skill-row .skill-tools { grid-column: 1 / -1; padding-left: 42px; }
+
+  .project { grid-template-columns: 1fr; gap: 24px; }
+  .project-arrow { display: none; }
+  .project-metrics { max-width: 100%; }
+
+  .timeline-item { grid-template-columns: 1fr; gap: 12px; padding: 32px 0; }
+
+  .roots-grid { grid-template-columns: 1fr; gap: 24px; }
+
+  .contact-grid { grid-template-columns: 1fr; gap: 36px; }
+
+  section { padding: 80px 0; }
+}
+
+@media (max-width: 560px) {
+  .stat-row { grid-template-columns: 1fr; }
+  .stat { border-right: none; }
+  .stat:not(:last-child) { border-bottom: 1px solid var(--rule); }
+  .stat-num { font-size: 2.1rem; }
+  .project-metrics { grid-template-columns: 1fr; }
+  .project-metrics .m + .m { border-left: none; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 16px; margin-top: 16px; }
+}
+</style>
 </head>
 <body>
-    <div class="cursor-dot"></div>
-    <div class="cursor-ring"></div>
-    <div class="gradient-orb orb-1"></div>
-    <div class="gradient-orb orb-2"></div>
-    <div class="gradient-orb orb-3"></div>
 
-    <nav>
-        <div class="nav-content">
-            <div class="logo">HELLY<span>.</span></div>
-            <ul class="nav-links">
-                <li><a href="#work">Work</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><span class="nav-status">Available for work</span></li>
-            </ul>
-            <button class="nav-toggle" aria-label="Menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+<!-- ============== ICON SHEET (single source of truth) ============== -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></symbol>
+  <symbol id="i-arrow-up-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h10v10M7 17 17 7"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+  <symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol>
+  <symbol id="i-shop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7h20l-2 12H4L2 7Z"/><path d="M16 11a4 4 0 0 1-8 0"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+  <symbol id="i-msg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+
+  <!-- Custom heritage glyphs -->
+
+  <!-- Tulsi leaf — used as logo mark and decorative bullet -->
+  <symbol id="m-tulsi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4">
+    <path d="M12 2c-3.5 4-6 7-6 11a6 6 0 0 0 12 0c0-4-2.5-7-6-11Z"/>
+    <path d="M12 5v14"/>
+    <path d="M12 9c-1.5.5-3 2-3 4M12 13c-1.5.5-3 2-3 4M12 9c1.5.5 3 2 3 4M12 13c1.5.5 3 2 3 4"/>
+  </symbol>
+
+  <!-- Lotus mark — used as ornament -->
+  <symbol id="m-lotus" viewBox="0 0 60 36" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4">
+    <path d="M30 32c-12 0-20-8-20-14 4 0 8 2 10 6"/>
+    <path d="M30 32c12 0 20-8 20-14-4 0-8 2-10 6"/>
+    <path d="M30 32c-7 0-12-6-13-12 3 0 6 2 8 6"/>
+    <path d="M30 32c7 0 12-6 13-12-3 0-6 2-8 6"/>
+    <path d="M30 32c-3 0-6-6-6-12 2 0 4 2 5 6"/>
+    <path d="M30 32c3 0 6-6 6-12-2 0-4 2-5 6"/>
+    <path d="M30 32V14"/>
+  </symbol>
+
+  <!-- Diya / lamp -->
+  <symbol id="m-diya" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4">
+    <path d="M4 14h16a8 8 0 0 1-16 0Z"/>
+    <path d="M12 14V8c0-2 1-3 1-4 0 1.5-2 2-2 4 0 2 1 3 1 6"/>
+    <path d="M3 14h18"/>
+  </symbol>
+
+  <!-- Pichwai-inspired arch (used as decorative hero element) -->
+  <symbol id="m-arch" viewBox="0 0 580 720" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+    <!-- Outer trefoil arch -->
+    <path d="M40 720 V 280 Q 40 60 290 60 Q 540 60 540 280 V 720"/>
+    <!-- Inner arch -->
+    <path d="M90 720 V 290 Q 90 110 290 110 Q 490 110 490 290 V 720"/>
+    <!-- Apex finial -->
+    <circle cx="290" cy="40" r="10"/>
+    <path d="M290 50 V 60"/>
+    <!-- Pillars at base -->
+    <rect x="30" y="700" width="30" height="20"/>
+    <rect x="520" y="700" width="30" height="20"/>
+    <!-- Decorative dots inside arch -->
+    <circle cx="290" cy="180" r="3" fill="currentColor"/>
+    <circle cx="220" cy="220" r="2" fill="currentColor"/>
+    <circle cx="360" cy="220" r="2" fill="currentColor"/>
+    <circle cx="180" cy="280" r="2" fill="currentColor"/>
+    <circle cx="400" cy="280" r="2" fill="currentColor"/>
+    <!-- Hanging bell -->
+    <path d="M290 110 v 30"/>
+    <path d="M280 140 q 10 14 20 0"/>
+    <circle cx="290" cy="148" r="2.5" fill="currentColor"/>
+  </symbol>
+
+  <!-- Ornament glyph (kalamkari-inspired) -->
+  <symbol id="orn-1" viewBox="0 0 36 22" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4">
+    <path d="M2 11h6"/>
+    <path d="M28 11h6"/>
+    <path d="M18 4 c -3 0 -5 3 -5 7 c 0 4 2 7 5 7 c 3 0 5 -3 5 -7 c 0 -4 -2 -7 -5 -7 z"/>
+    <circle cx="18" cy="11" r="2" fill="currentColor"/>
+    <path d="M11 11 q -2 -3 -3 0"/>
+    <path d="M25 11 q 2 -3 3 0"/>
+  </symbol>
+</svg>
+
+<!-- ============== NAV ============== -->
+<nav id="nav">
+  <div class="nav-content">
+    <a href="#top" class="logo">
+      <span class="logo-mark"><svg width="22" height="22"><use href="#m-tulsi"/></svg></span>
+      Helly Patel
+    </a>
+    <ul class="nav-links">
+      <li><a href="#now"><span class="num devanagari">१</span>Approach</a></li>
+      <li><a href="#work"><span class="num devanagari">२</span>Work</a></li>
+      <li><a href="#skills"><span class="num devanagari">३</span>Toolkit</a></li>
+      <li><a href="#roots"><span class="num devanagari">४</span>Roots</a></li>
+      <li><a href="#contact"><span class="num devanagari">५</span>Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ============== HERO ============== -->
+<section class="hero" id="top">
+  <!-- Decorative pichwai arch in the background -->
+  <svg class="hero-arch" viewBox="0 0 580 720" style="color: var(--indigo);"><use href="#m-arch"/></svg>
+
+  <div class="container">
+    <div class="hero-eyebrow">Software Developer · Tech Lead · Surat, Gujarat</div>
+
+    <div class="hero-shloka devanagari">कर्मण्येवाधिकारस्ते</div>
+    <div class="hero-shloka-translit">"karmaṇy-evādhikāras te" · your right is to the work, not its fruits.</div>
+
+    <h1>
+      Building international<br>
+      <em>e-commerce</em>, serverless<br>
+      systems, and the <em>quiet</em><br>
+      automation behind both.
+    </h1>
+
+    <div class="hero-meta-grid">
+      <p class="hero-description">
+        I'm a <strong>full-stack developer and tech lead</strong> at devx AI labs with 3+ years building international Shopify storefronts, serverless AWS middleware, and AI-powered automation. I currently operate as developer, tech lead, and project coordinator across <strong>6+ live brands</strong>, owning architecture, delivery, and clients end to end.
+      </p>
+      <div class="hero-actions">
+        <a href="#work" class="btn btn-primary">
+          Selected work
+          <svg class="icon icon-sm"><use href="#i-arrow"/></svg>
+        </a>
+        <a href="mailto:hellypatel.1104@gmail.com" class="btn btn-ghost">
+          Get in touch
+          <svg class="icon icon-sm"><use href="#i-arrow-up-right"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="stat-num"><em>6+</em></div><div class="stat-label">Live brands shipped</div></div>
+      <div class="stat"><div class="stat-num"><em>2×</em></div><div class="stat-label">Aiza sales uplift</div></div>
+      <div class="stat"><div class="stat-num"><em>90%</em></div><div class="stat-label">Ops time eliminated</div></div>
+      <div class="stat"><div class="stat-num"><em>55%</em></div><div class="stat-label">Faster page loads</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== APPROACH ============== -->
+<section id="now">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">
+        <span class="deva devanagari">१</span>
+        <span>§ 01 · Approach</span>
+      </div>
+      <div>
+        <h2>I work as <em>three people</em>, at the same time.</h2>
+        <p>Most of what I do doesn't fit neatly under "developer." On any given week, I'm shipping code, leading a team, and talking to clients, sometimes in the same hour.</p>
+      </div>
+    </div>
+
+    <div class="approach-grid">
+      <article class="approach-card reveal">
+        <div class="approach-num devanagari">१</div>
+        <h3 class="approach-title">As an <em>engineer</em></h3>
+        <p>I build international Shopify storefronts and the serverless AWS systems behind them. Performance is a craft, not a checkbox: fast load times, real conversion lift, and middleware that runs without anyone watching it.</p>
+      </article>
+
+      <article class="approach-card reveal">
+        <div class="approach-num devanagari">२</div>
+        <h3 class="approach-title">As a <em>tech lead</em></h3>
+        <p>I lead three brands end to end: sprint planning, intern mentorship, code review, and the unglamorous work of keeping a team unblocked. Good leadership looks quiet from the outside.</p>
+      </article>
+
+      <article class="approach-card reveal">
+        <div class="approach-num devanagari">३</div>
+        <h3 class="approach-title">As a <em>partner</em></h3>
+        <p>I own client conversations, scope decisions, and delivery. The brands I work with don't go through five layers to reach me. I'm in the room, and I stay there from kickoff to launch night.</p>
+      </article>
+    </div>
+
+    <div class="approach-pull">
+      <p>Outside the day-to-day, I'm building <strong>LangShop</strong> solo, a multi-lingual Shopify app from scratch, and I've authored a custom Claude AI Skill that auto-fetches PageSpeed data, runs Core Web Vitals analysis, and produces actionable fix recommendations. <em>Tooling that does the boring parts so I can focus on the work that matters.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============== WORK ============== -->
+<section id="work">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">
+        <span class="deva devanagari">२</span>
+        <span>§ 02 · Selected Work</span>
+      </div>
+      <div>
+        <h2>Projects with <em>receipts</em>. Published case studies, real numbers.</h2>
+        <p>Each link goes to the live site or a third-party case study by devx AI labs. Verify the metrics yourself.</p>
+      </div>
+    </div>
+
+    <div class="work-list">
+
+      <article class="project reveal">
+        <div class="project-meta">
+          <span class="num devanagari">१</span>
+          <span class="year">2024 / Now</span>
+          <span class="role"><svg class="icon-sm" style="width:12px;height:12px"><use href="#i-shop"/></svg> Sole Engineer · Shopify</span>
         </div>
-    </nav>
-
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-eyebrow">Senior Shopify Developer</div>
-                <h1>
-                    Building high-performance<br>
-                    <span class="line-2">e-commerce experiences</span>
-                </h1>
-                <p class="hero-description">
-                    I architect and develop enterprise-level Shopify solutions for international brands.
-                    Specializing in performance optimization, scalable theme architecture, and conversion-driven experiences.
-                </p>
-                <div class="cta-group">
-                    <a href="mailto:hellypatel.1104@gmail.com" class="cta-primary">
-                        Get in Touch
-                        <svg class="cta-arrow" viewBox="0 0 20 20" fill="none">
-                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </a>
-                    <a href="https://github.com/hellypatel113" target="_blank" class="cta-secondary">
-                        View GitHub
-                        <svg class="cta-arrow" viewBox="0 0 20 20" fill="none">
-                            <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="stats-bar">
-                    <div class="stat-item">
-                        <div class="stat-value">2+</div>
-                        <div class="stat-label">Years Experience</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">10+</div>
-                        <div class="stat-label">Projects Delivered</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">90+</div>
-                        <div class="stat-label">PageSpeed Score</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">20%</div>
-                        <div class="stat-label">Avg Conversion Lift</div>
-                    </div>
-                </div>
-            </div>
+        <div class="project-body">
+          <h3>French Beauty Co<em>.</em></h3>
+          <div class="project-sub">Premium beauty retailer · Australia · Custom Shopify theme</div>
+          <p>12+ month partnership as the sole engineer. Owned the storefront end to end: performance engineering, custom variant logic, deployment workflows, brand storytelling pages, Promotions Page, and CartX integration. A year of methodical UX improvements that compounded into measurable wins.</p>
+          <div class="project-metrics">
+            <div class="m"><div class="m-val"><em>40–55%</em></div><div class="m-lbl">Faster homepage & PDP load</div></div>
+            <div class="m"><div class="m-val"><em>15–20%</em></div><div class="m-lbl">Browse efficiency lift</div></div>
+            <div class="m"><div class="m-val"><em>1 day</em></div><div class="m-lbl">Email system, scoped 10×</div></div>
+          </div>
+          <div class="project-tags">
+            <span class="tag">Shopify Liquid</span>
+            <span class="tag">Performance Engineering</span>
+            <span class="tag">Custom Theme</span>
+            <span class="tag">CartX Integration</span>
+          </div>
+          <div class="project-links">
+            <a href="https://frenchbeautyco.com.au/" target="_blank" rel="noopener" class="project-link">Live site <svg class="icon icon-sm"><use href="#i-arrow-up-right"/></svg></a>
+            <a href="https://www.devxlabs.ai/case-studies/fbc" target="_blank" rel="noopener" class="project-link alt">Case study <svg class="icon icon-sm"><use href="#i-arrow-up-right"/></svg></a>
+          </div>
         </div>
-    </section>
+        <div class="project-arrow"><svg class="icon"><use href="#i-arrow"/></svg></div>
+      </article>
 
-    <section class="projects-section" id="work">
-        <div class="container">
-            <div class="section-header reveal">
-                <div class="section-label">Selected Projects</div>
-                <h2 class="section-title">Featured Work</h2>
-                <div class="section-divider"></div>
-            </div>
-
-            <div class="projects-grid">
-
-                <!-- French Beauty Co -->
-                <article class="project reveal">
-                    <div class="project-visual">
-                        <div class="brand-display">FRENCH BEAUTY CO.</div>
-                    </div>
-                    <div class="project-info">
-                        <div class="project-meta">
-                            <span class="project-tag">Custom Theme</span>
-                            <span class="project-tag">Performance</span>
-                            <span class="project-tag">CartX Integration</span>
-                        </div>
-                        <h3>French Beauty Co</h3>
-                        <p class="project-description">
-                            Built a custom Shopify Online Store 2.0 theme from the ground up for this premium Australian
-                            beauty retailer. Engineered a bespoke variant management system using product metafields,
-                            integrated the CartX cart drawer with GWP logic and metaobject-driven free gift offers, and
-                            implemented a performance-first architecture with deferred script loading and third-party
-                            script blocking. Managed 2,400+ products across 333 collections.
-                        </p>
-                        <div class="project-metrics">
-                            <div class="metric">
-                                <div class="metric-value">90+</div>
-                                <div class="metric-label">Desktop Speed</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">70+</div>
-                                <div class="metric-label">Mobile Speed</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">2,400+</div>
-                                <div class="metric-label">Products</div>
-                            </div>
-                        </div>
-                        <div class="tech-stack">
-                            <div class="tech-stack-label">Technology</div>
-                            <div class="tech-list">
-                                <span class="tech-item">Shopify Liquid</span>
-                                <span class="tech-item">Vanilla JS</span>
-                                <span class="tech-item">Web Components</span>
-                                <span class="tech-item">CartX</span>
-                                <span class="tech-item">Mixpanel</span>
-                                <span class="tech-item">GA4</span>
-                            </div>
-                        </div>
-                        <a href="https://frenchbeautyco.com.au/" target="_blank" class="project-link">
-                            Visit Live Site
-                            <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-                    </div>
-                </article>
-
-                <!-- AIZA -->
-                <article class="project reveal">
-                    <div class="project-visual">
-                        <div class="brand-display">AIZA</div>
-                    </div>
-                    <div class="project-info">
-                        <div class="project-meta">
-                            <span class="project-tag">Multi-Market</span>
-                            <span class="project-tag">Performance Engineering</span>
-                            <span class="project-tag">RTL Support</span>
-                        </div>
-                        <h3>AIZA</h3>
-                        <p class="project-description">
-                            Heavily customised a Palo Alto v5.8.0 theme for this luxury multi-market beauty platform
-                            serving UAE, Saudi Arabia, and international markets. Architected a metaobject-driven
-                            Gift With Purchase system with market-aware pricing, built an 8-phase performance
-                            optimisation pipeline with interaction-deferred asset loading, and implemented full
-                            RTL support across 7 locales. Managed 111 sections, 194 snippets, and 4,600+ commits.
-                        </p>
-                        <div class="project-metrics">
-                            <div class="metric">
-                                <div class="metric-value">+10%</div>
-                                <div class="metric-label">Conversion Lift</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">7</div>
-                                <div class="metric-label">Locales</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">3</div>
-                                <div class="metric-label">Markets</div>
-                            </div>
-                        </div>
-                        <div class="tech-stack">
-                            <div class="tech-stack-label">Technology</div>
-                            <div class="tech-list">
-                                <span class="tech-item">Shopify Liquid</span>
-                                <span class="tech-item">Vanilla JS</span>
-                                <span class="tech-item">Web Components</span>
-                                <span class="tech-item">CSS Custom Properties</span>
-                                <span class="tech-item">Metaobjects</span>
-                                <span class="tech-item">GTM</span>
-                            </div>
-                        </div>
-                        <a href="https://www.aiza.co/" target="_blank" class="project-link">
-                            Visit Live Site
-                            <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-                    </div>
-                </article>
-
-                <!-- Kores India -->
-                <article class="project reveal">
-                    <div class="project-visual">
-                        <div class="brand-display">KORES</div>
-                    </div>
-                    <div class="project-info">
-                        <div class="project-meta">
-                            <span class="project-tag">Frontend Lead</span>
-                            <span class="project-tag">AWS Integration</span>
-                            <span class="project-tag">Conversion</span>
-                        </div>
-                        <h3>Kores India</h3>
-                        <p class="project-description">
-                            Led frontend development for this leading stationery brand's e-commerce platform.
-                            Integrated AWS APIs, implemented OTP authentication, and built complex voucher logic
-                            delivering 20% conversion lift.
-                        </p>
-                        <div class="project-metrics">
-                            <div class="metric">
-                                <div class="metric-value">+20%</div>
-                                <div class="metric-label">Conversion</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">OTP</div>
-                                <div class="metric-label">Auth System</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">AWS</div>
-                                <div class="metric-label">Integration</div>
-                            </div>
-                        </div>
-                        <div class="tech-stack">
-                            <div class="tech-stack-label">Technology</div>
-                            <div class="tech-list">
-                                <span class="tech-item">React.js</span>
-                                <span class="tech-item">JavaScript</span>
-                                <span class="tech-item">AWS APIs</span>
-                                <span class="tech-item">OTP Auth</span>
-                            </div>
-                        </div>
-                        <a href="https://koresindia.in/" target="_blank" class="project-link">
-                            Visit Live Site
-                            <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-                    </div>
-                </article>
-
-                <!-- Foxtale -->
-                <article class="project reveal">
-                    <div class="project-visual">
-                        <div class="brand-display">FOXTALE</div>
-                    </div>
-                    <div class="project-info">
-                        <div class="project-meta">
-                            <span class="project-tag">Shopify Development</span>
-                            <span class="project-tag">UI Components</span>
-                            <span class="project-tag">Performance</span>
-                        </div>
-                        <h3>Foxtale</h3>
-                        <p class="project-description">
-                            Developed custom Shopify sections, reusable UI components, and optimized product detail pages
-                            for this fast-growing D2C skincare brand. Built dynamic product recommendation modules,
-                            implemented lazy-loaded image galleries for ingredient breakdowns, and engineered a
-                            conversion-focused PDP layout with real-time inventory indicators and quick-add functionality.
-                            Delivered measurable speed improvements across mobile and desktop.
-                        </p>
-                        <div class="project-metrics">
-                            <div class="metric">
-                                <div class="metric-value">85+</div>
-                                <div class="metric-label">PageSpeed</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">D2C</div>
-                                <div class="metric-label">Platform</div>
-                            </div>
-                            <div class="metric">
-                                <div class="metric-value">15+</div>
-                                <div class="metric-label">Components</div>
-                            </div>
-                        </div>
-                        <div class="tech-stack">
-                            <div class="tech-stack-label">Technology</div>
-                            <div class="tech-list">
-                                <span class="tech-item">Shopify Liquid</span>
-                                <span class="tech-item">JavaScript</span>
-                                <span class="tech-item">React.js</span>
-                                <span class="tech-item">Custom Sections</span>
-                                <span class="tech-item">Lazy Loading</span>
-                                <span class="tech-item">SEO</span>
-                            </div>
-                        </div>
-                        <a href="https://foxtale.in/" target="_blank" class="project-link">
-                            Visit Live Site
-                            <svg viewBox="0 0 20 20" fill="none">
-                                <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </a>
-                    </div>
-                </article>
-
-            </div>
+      <article class="project reveal">
+        <div class="project-meta">
+          <span class="num devanagari">२</span>
+          <span class="year">2025</span>
+          <span class="role"><svg class="icon-sm" style="width:12px;height:12px"><use href="#i-target"/></svg> Dev + Lead · Shopify</span>
         </div>
-    </section>
-
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-label">Get in Touch</div>
-                <h2 class="footer-title">Let's Work Together</h2>
-                <p class="footer-subtitle">Always open to discussing new projects and opportunities</p>
-
-                <div class="footer-links">
-                    <a href="mailto:hellypatel.1104@gmail.com" class="footer-link">Email</a>
-                    <a href="https://github.com/hellypatel113" target="_blank" class="footer-link">GitHub</a>
-                    <a href="https://www.linkedin.com/in/helly-patel101/" target="_blank" class="footer-link">LinkedIn</a>
-                </div>
-
-                <div class="footer-bottom">
-                    <span>&copy; 2026 Helly Patel. All rights reserved.</span>
-                    <div class="footer-bottom-links">
-                        <a href="mailto:hellypatel.1104@gmail.com">hellypatel.1104@gmail.com</a>
-                    </div>
-                </div>
-            </div>
+        <div class="project-body">
+          <h3>AÏZA <em>·</em> Website</h3>
+          <div class="project-sub">Premium beauty · UAE × Global · Multi-market storefront</div>
+          <p>Premium beauty brand rooted in Arab heritage and modern science. Rebuilt theme components for premium alignment, reworked PDP and PLP conversion hierarchy, and shipped multi-market multi-currency checkout with mobile-first responsive refinements.</p>
+          <div class="project-metrics">
+            <div class="m"><div class="m-val"><em>2×</em></div><div class="m-lbl">Overall sales value</div></div>
+            <div class="m"><div class="m-val"><em>60%</em></div><div class="m-lbl">Faster PDP content load</div></div>
+            <div class="m"><div class="m-val"><em>50%</em></div><div class="m-lbl">ATC → Checkout time</div></div>
+          </div>
+          <div class="project-tags">
+            <span class="tag">Multi-Market</span>
+            <span class="tag">Multi-Currency</span>
+            <span class="tag">Conversion UX</span>
+            <span class="tag">Mobile-First</span>
+          </div>
+          <div class="project-links">
+            <a href="https://www.aiza.co/" target="_blank" rel="noopener" class="project-link">Live site <svg class="icon icon-sm"><use href="#i-arrow-up-right"/></svg></a>
+            <a href="https://www.devxlabs.ai/case-studies/aiza-website" target="_blank" rel="noopener" class="project-link alt">Case study <svg class="icon icon-sm"><use href="#i-arrow-up-right"/></svg></a>
+          </div>
         </div>
-    </footer>
+        <div class="project-arrow"><svg class="icon"><use href="#i-arrow"/></svg></div>
+      </article>
 
-    <script>
-        // Intersection Observer for reveal animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+      <article class="project reveal">
+        <div class="project-meta">
+          <span class="num devanagari">३</span>
+          <span class="year">2025</span>
+          <span class="role"><svg class="icon-sm" style="width:12px;height:12px"><use href="#i-cloud"/></svg> Architect · AWS Serverless</span>
+        </div>
+        <div class="project-body">
+          <h3>AÏZA <em>×</em> Aramex WMS</h3>
+          <div class="project-sub">Order pipeline middleware · Shopify ↔ Aramex Warehouse Management</div>
+          <p>An order pipeline that runs without anyone watching it. Designed and built a serverless middleware to fully automate Shopify → Aramex WMS, covering order creation, inventory sync, shipment tracking, cancellations, and delivery status. Configured API Gateway, CloudWatch, S3 archival, IAM, Secrets Manager, and staged environments.</p>
+          <div class="project-metrics">
+            <div class="m"><div class="m-val"><em>90%</em></div><div class="m-lbl">Ops involvement removed</div></div>
+            <div class="m"><div class="m-val"><em>99%</em></div><div class="m-lbl">Middleware uptime</div></div>
+            <div class="m"><div class="m-val"><em>98%</em></div><div class="m-lbl">Order pass rate</div></div>
+          </div>
+          <div class="project-tags">
+            <span class="tag">AWS Lambda</span>
+            <span class="tag">API Gateway</span>
+            <span class="tag">Node.js</span>
+            <span class="tag">Real-time Pipeline</span>
+          </div>
+          <div class="project-links">
+            <a href="https://www.devxlabs.ai/case-studies/aiza-middleware" target="_blank" rel="noopener" class="project-link alt">Case study <svg class="icon icon-sm"><use href="#i-arrow-up-right"/></svg></a>
+          </div>
+        </div>
+        <div class="project-arrow"><svg class="icon"><use href="#i-arrow"/></svg></div>
+      </article>
 
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+      <article class="project reveal">
+        <div class="project-meta">
+          <span class="num devanagari">४</span>
+          <span class="year">2025</span>
+          <span class="role"><svg class="icon-sm" style="width:12px;height:12px"><use href="#i-zap"/></svg> Architect · Event Bridge</span>
+        </div>
+        <div class="project-body">
+          <h3>Judge.me <em>↔</em> WebEngage</h3>
+          <div class="project-sub">Webhook middleware · Reviews → Customer engagement automation</div>
+          <p>Captures Judge.me review webhook events, validates HMAC signatures, transforms payloads, and pushes to WebEngage for automated customer engagement flows. Includes retry logic, Secrets Manager integration, and separate staging and production environments.</p>
+          <div class="project-metrics">
+            <div class="m"><div class="m-val"><em>Real-time</em></div><div class="m-lbl">Event-driven flow</div></div>
+            <div class="m"><div class="m-val"><em>HMAC</em></div><div class="m-lbl">Signature validated</div></div>
+            <div class="m"><div class="m-val"><em>2 envs</em></div><div class="m-lbl">Staging & production</div></div>
+          </div>
+          <div class="project-tags">
+            <span class="tag">AWS Lambda</span>
+            <span class="tag">Webhooks</span>
+            <span class="tag">Secrets Manager</span>
+            <span class="tag">HMAC Validation</span>
+          </div>
+        </div>
+        <div class="project-arrow"><svg class="icon"><use href="#i-arrow"/></svg></div>
+      </article>
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
+      <article class="project reveal">
+        <div class="project-meta">
+          <span class="num devanagari">५</span>
+          <span class="year">In progress</span>
+          <span class="role"><svg class="icon-sm" style="width:12px;height:12px"><use href="#i-globe"/></svg> Solo Build · Shopify App</span>
+        </div>
+        <div class="project-body">
+          <h3>LangShop</h3>
+          <div class="project-sub">Greenfield Shopify app · Multi-lingual storefront integration</div>
+          <p>A large-scale, multi-lingual Shopify app architected and developed independently from scratch. Ongoing product covering translation flows, locale handling, merchant configuration, and storefront integration. Solo design, solo build, growing scope.</p>
+          <div class="project-metrics">
+            <div class="m"><div class="m-val"><em>Solo</em></div><div class="m-lbl">Architect & engineer</div></div>
+            <div class="m"><div class="m-val"><em>Active</em></div><div class="m-lbl">In active development</div></div>
+            <div class="m"><div class="m-val"><em>Multi</em></div><div class="m-lbl">Locale & translation</div></div>
+          </div>
+          <div class="project-tags">
+            <span class="tag">Shopify App</span>
+            <span class="tag">Multi-lingual</span>
+            <span class="tag">Greenfield</span>
+            <span class="tag">Solo Build</span>
+          </div>
+        </div>
+        <div class="project-arrow"><svg class="icon"><use href="#i-arrow"/></svg></div>
+      </article>
 
-        // Nav scroll effect
-        const nav = document.querySelector('nav');
-        window.addEventListener('scroll', () => {
-            nav.classList.toggle('scrolled', window.scrollY > 60);
-        });
+    </div>
+  </div>
+</section>
 
-        // Parallax on orbs
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            document.querySelectorAll('.gradient-orb').forEach((orb, i) => {
-                orb.style.transform = `translateY(${scrolled * (0.15 + i * 0.05)}px)`;
-            });
-        });
+<!-- ============== SKILLS ============== -->
+<section id="skills">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">
+        <span class="deva devanagari">३</span>
+        <span>§ 03 · Toolkit</span>
+      </div>
+      <div>
+        <h2>What I work <em>with</em>, daily.</h2>
+        <p>A working stack. The things I actually ship with, not a buzzword inventory.</p>
+      </div>
+    </div>
 
-        // Subtle 3D tilt on project cards (desktop only)
-        if (window.innerWidth > 1024) {
-            document.querySelectorAll('.project').forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    const rect = card.getBoundingClientRect();
-                    const x = (e.clientX - rect.left) / rect.width - 0.5;
-                    const y = (e.clientY - rect.top) / rect.height - 0.5;
-                    card.style.transform = `perspective(1200px) rotateX(${y * -3}deg) rotateY(${x * 3}deg) translateY(-6px)`;
-                });
-                card.addEventListener('mouseleave', () => {
-                    card.style.transform = '';
-                });
-            });
+    <div class="skills-block">
+      <div class="now-side">Languages, frameworks, infra, ops</div>
+      <div class="skills-list">
+        <div class="skill-row reveal">
+          <span class="skill-icon"><svg class="icon icon-lg"><use href="#i-code"/></svg></span>
+          <span class="skill-name">Languages</span>
+          <span class="skill-tools">JavaScript (ES6+) · TypeScript · HTML5 · CSS3 · Liquid · PHP · Java · Python · MySQL · PL/SQL</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-icon"><svg class="icon icon-lg"><use href="#i-grid"/></svg></span>
+          <span class="skill-name">Frameworks</span>
+          <span class="skill-tools">React.js · Redux / Redux Thunk · Formik · Tailwind CSS · Bootstrap · jQuery · Node.js</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-icon"><svg class="icon icon-lg"><use href="#i-shop"/></svg></span>
+          <span class="skill-name">Shopify</span>
+          <span class="skill-tools">Custom themes · Storefront & Admin APIs · Multi-market / multi-currency · Performance engineering · App development</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-icon"><svg class="icon icon-lg"><use href="#i-cloud"/></svg></span>
+          <span class="skill-name">Cloud & Serverless</span>
+          <span class="skill-tools">AWS Lambda · API Gateway · S3 · CloudWatch · IAM · Secrets Manager · SAM CLI · Staging & production pipelines</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-icon"><svg class="icon icon-lg"><use href="#i-spark"/></svg></span>
+          <span class="skill-name">AI & Automation</span>
+          <span class="skill-tools">Claude AI (advanced power user) · Custom AI skill engineering · Prompt engineering · Workflow automation · Cursor IDE</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-icon"><svg class="icon icon-lg"><use href="#i-clipboard"/></svg></span>
+          <span class="skill-name">Project Management</span>
+          <span class="skill-tools">ClickUp · JIRA · Trello · Linear · Atlassian · GitHub Projects · Sprint planning · Stakeholder reporting</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-icon"><svg class="icon icon-lg"><use href="#i-tools"/></svg></span>
+          <span class="skill-name">Dev Tools</span>
+          <span class="skill-tools">VS Code · Cursor · Git · GitHub · CI/CD pipelines · Figma · Google Search Console</span>
+        </div>
+        <div class="skill-row reveal">
+          <span class="skill-icon"><svg class="icon icon-lg"><use href="#i-msg"/></svg></span>
+          <span class="skill-name">Collaboration</span>
+          <span class="skill-tools">Slack · Microsoft Teams · Notion · Google Workspace · Async-first by default</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-            // Brand display parallax inside visual
-            document.querySelectorAll('.project-visual').forEach(visual => {
-                visual.addEventListener('mousemove', (e) => {
-                    const rect = visual.getBoundingClientRect();
-                    const x = (e.clientX - rect.left - rect.width / 2) / 15;
-                    const y = (e.clientY - rect.top - rect.height / 2) / 15;
-                    const brand = visual.querySelector('.brand-display');
-                    brand.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
-                });
-                visual.addEventListener('mouseleave', () => {
-                    const brand = visual.querySelector('.brand-display');
-                    brand.style.transform = '';
-                });
-            });
-        }
+<!-- ============== ROOTS — heritage section ============== -->
+<section id="roots" class="roots">
+  <div class="container">
+    <div class="roots-grid">
+      <div class="roots-side">
+        <span class="deva devanagari">४</span>
+        <span>§ 04 · Roots</span>
+        <svg class="icon-lg" style="color: var(--vermilion); margin-top: 14px;"><use href="#m-lotus"/></svg>
+      </div>
+      <div>
+        <h3>From <em>Surat</em>. A city of merchants, makers, and quiet craft.</h3>
+        <p class="roots-text">
+          I'm from <strong>Gujarat</strong>, a place where commerce, craft, and continuity have lived together for centuries. <strong>Surat</strong> traded textiles with the world long before "global e-commerce" was a phrase, and Patola weavers have been engineering tessellations into silk for nine hundred years.
+        </p>
+        <p class="roots-text">
+          That heritage is part of how I work: methodical, patient, focused on the thing that lasts after the launch. I bring that same steadiness to the storefronts I ship.
+        </p>
+      </div>
+      <div>
+        <p class="roots-text">
+          Outside of code, I'm rooted in this culture: festivals, food, family, the quiet rhythm of a Gujarati home. The <em>diya</em> on Diwali. The <em>aarti</em> bell. A grandmother's recipe written in a notebook.
+        </p>
+        <p class="roots-text">
+          Engineering, for me, is a kind of devotion: a careful, daily practice. The <em>Gita</em> says it well:
+        </p>
+        <p class="roots-quote devanagari">
+          योगः कर्मसु कौशलम्
+          <span class="roots-quote-translit">"yogaḥ karmasu kauśalam" · yoga is excellence in action.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        // Counter animation for stats
-        const animateCounter = (element, target, duration) => {
-            let start = null;
-            const step = (timestamp) => {
-                if (!start) start = timestamp;
-                const progress = Math.min((timestamp - start) / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
-                element.textContent = Math.floor(eased * target) + element.dataset.suffix;
-                if (progress < 1) requestAnimationFrame(step);
-            };
-            requestAnimationFrame(step);
-        };
+<!-- ============== CONTACT ============== -->
+<section id="contact" class="contact-section">
+  <div class="container">
+    <div class="contact-eyebrow">
+      <span class="deva devanagari">५</span>
+      <span>§ 05 · Contact ·</span>
+      <span class="deva devanagari">नमस्ते</span>
+    </div>
+    <h2 class="contact-title">If you've made it this far, <em>let's talk</em>.</h2>
 
-        const statsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.querySelectorAll('.stat-value').forEach(stat => {
-                        const text = stat.textContent;
-                        const num = parseInt(text.match(/\d+/)?.[0] || 0);
-                        const suffix = text.replace(/\d+/, '');
-                        stat.dataset.suffix = suffix;
-                        if (num > 0) animateCounter(stat, num, 1800);
-                    });
-                    statsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
+    <div class="contact-grid">
+      <div class="contact-col">
+        <h4>Email</h4>
+        <a href="mailto:hellypatel.1104@gmail.com" class="contact-link">
+          hellypatel.1104@gmail.com
+          <svg class="icon icon-sm"><use href="#i-arrow-up-right"/></svg>
+        </a>
+      </div>
+      <div class="contact-col">
+        <h4>Elsewhere</h4>
+        <ul class="social-list">
+          <li><a href="https://github.com/hellypatel113" target="_blank" rel="noopener"><svg class="icon"><use href="#i-github"/></svg> GitHub / hellypatel113</a></li>
+          <li><a href="https://www.linkedin.com/in/helly-patel101/" target="_blank" rel="noopener"><svg class="icon"><use href="#i-linkedin"/></svg> LinkedIn / helly-patel101</a></li>
+          <li><a href="tel:+918320172691"><svg class="icon"><use href="#i-phone"/></svg> +91 832 017 2691</a></li>
+          <li><a><svg class="icon"><use href="#i-pin"/></svg> Surat, Gujarat, India</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-        const statsBar = document.querySelector('.stats-bar');
-        if (statsBar) statsObserver.observe(statsBar);
+<!-- ============== FOOTER ============== -->
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <span>© 2026 Helly Patel · Surat, Gujarat, India</span>
+      <span class="signoff devanagari">शुभम्</span>
+    </div>
+  </div>
+</footer>
 
-        // Metric counter animation
-        const metricsObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.querySelectorAll('.metric-value').forEach(metric => {
-                        const text = metric.textContent;
-                        const num = parseInt(text.match(/\d+/)?.[0] || 0);
-                        const suffix = text.replace(/[\d]+/, '');
-                        metric.dataset.suffix = suffix;
-                        if (num > 0) animateCounter(metric, num, 1500);
-                    });
-                    metricsObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        document.querySelectorAll('.project-metrics').forEach(m => metricsObserver.observe(m));
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 30);
+}, { passive: true });
 
-        // Custom cursor
-        if (window.innerWidth > 768) {
-            const dot = document.querySelector('.cursor-dot');
-            const ring = document.querySelector('.cursor-ring');
-            let mouseX = 0, mouseY = 0;
-            let ringX = 0, ringY = 0;
-
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                dot.style.left = mouseX - 4 + 'px';
-                dot.style.top = mouseY - 4 + 'px';
-            });
-
-            function animateRing() {
-                ringX += (mouseX - ringX) * 0.12;
-                ringY += (mouseY - ringY) * 0.12;
-                ring.style.left = ringX - 18 + 'px';
-                ring.style.top = ringY - 18 + 'px';
-                requestAnimationFrame(animateRing);
-            }
-            animateRing();
-
-            document.querySelectorAll('a, button, .project, .tech-item, .project-tag').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    dot.classList.add('hovering');
-                    ring.classList.add('hovering');
-                });
-                el.addEventListener('mouseleave', () => {
-                    dot.classList.remove('hovering');
-                    ring.classList.remove('hovering');
-                });
-            });
-        }
-    </script>
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id.length > 1) {
+      const t = document.querySelector(id);
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    }
+  });
+});
+</script>
 </body>
 </html>
